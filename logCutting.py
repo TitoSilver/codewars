@@ -1,3 +1,16 @@
+
+"""
+    FAVORITO:
+
+    def cut_log(p, n):
+    log = [0]
+    for _ in range(n):
+        log.append(max(pi + li for pi, li in zip(p[1:], log[::-1])))
+    return log[n]
+
+"""
+
+
 """
 
 https://www.codewars.com/kata/54b058ce56f22dc6fe0011df/train/python
@@ -33,3 +46,60 @@ Using the power of Stack Overflow and Google, he wants you to create a solution 
 (Be aware that if your algorithm is not efficient, it will attempt to look at 2^49 = 562949953421312 nodes instead of 49^2 = 2401... The solution will automatically fail if it takes longer than 6 seconds... which occurs at right around Log 23)
 
 """
+def proffit(checkTable,maxProffit):
+
+    
+    #calcula el mayor valor que puede obtener 
+
+    if len(maxProffit)==0:
+        return checkTable[0]
+
+    lenIterator= len(checkTable)
+
+
+    calculeteProffit= checkTable[len(checkTable)-1]
+
+    if lenIterator %2 ==0:
+        #even
+        for idx in range(1,len(checkTable)//2):
+            calculeteProffit= max(calculeteProffit, maxProffit[idx] + maxProffit[lenIterator-1 -idx] )
+    
+    else:
+        #odd
+        for idx in range(1, len(checkTable)//2 +1):
+            calculeteProffit= max(calculeteProffit, maxProffit[idx] + maxProffit[lenIterator-1 -idx] )
+
+
+    return calculeteProffit
+
+            
+
+def cut_log(p, n):
+
+    maxProffit=[]
+
+    for idx in range(1,n+2):
+        maxProffit.append( proffit( p[:idx],maxProffit ) )
+
+    
+    
+    return  maxProffit[len(maxProffit)-1]
+
+"""
+p = [  0,   1,   5,   8,   9,  10,  17,  17,  20,  24, # 0X's
+      30,  32,  35,  39,  43,  43,  45,  49,  50,  54, # 1X's
+      57,  60,  65,  68,  70,  74,  80,  81,  84,  85, # 2X's
+      87,  91,  95,  99, 101, 104, 107, 112, 115, 116, # 3X's
+     119] # 40th element
+
+"""
+
+p = [  0,   1,   5,   8,   9,  10,  17,  17,  20,  24, 30,  32,  35,  39,  43,  43,  45,  49,  50,  54,57,  60,  65,  68,  70,  74,  80,  81,  84,  85, 87,  91,  95,  99, 101, 104, 107, 112, 115, 116, 119] # 40th element
+
+#print("p: ",list(enumerate(p)))
+
+
+
+cut_log(p, 5)# 13
+
+cut_log(p, 8)# 22
