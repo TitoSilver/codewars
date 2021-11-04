@@ -47,6 +47,11 @@ If no keys are given, then you just have to reach the exit. If there are multipl
 There are 101 tests in total: 8 sample tests and 93 random tests. The largest random tests will have maximum side lengths of 50 x 50
 
 """
+
+"""
+HACERLO CON UN GRAFOS
+
+"""
 class Grid:
 
     keys={}
@@ -54,6 +59,7 @@ class Grid:
     empyPath=[]
     initGame=None
     exitGame=None
+    path= []
 
     def __init__(self, grid):
 
@@ -61,44 +67,74 @@ class Grid:
             for idxSquere in range(0,len(grid[idxElement])):
                 if grid[idxElement][idxSquere].islower():
                     self.keys.setdefault(grid[idxSquere][idxSquere], (idxElement,idxSquere))
+                    self.path.append((idxElement,idxSquere))
 
                 elif grid[idxElement][idxSquere].isupper():
                     self.doors.setdefault(grid[idxElement][idxSquere], (idxElement,idxSquere))
+                    self.path.append((idxElement,idxSquere))
 
                 elif grid[idxElement][idxSquere]==".":
                     self.empyPath.append((idxElement,idxSquere))
+                    self.path.append((idxElement,idxSquere))
 
                 elif grid[idxElement][idxSquere]== "@":
                     self.initGame= (idxElement,idxSquere)
+                    self.path.append((idxElement,idxSquere))
 
                 elif grid[idxElement][idxSquere]=="$":
                     self.exitGame=(idxElement,idxSquere)
+                    self.path.append((idxElement,idxSquere))
         
-        for row in grid:
-            print(row)
-        print("")
-        print("keys: {}\ndoors: {}\nemtyPath: {}\ninitGame: {}\nexitGame: {}".format(self.keys,self.doors,self.empyPath,self.initGame,self.exitGame))
 
-def recursiveCalculatePath(grid,posibleSolution,initPath, endPath):
-    if initPath ==endPath:
-        return posibleSolution
+        
+        # for row in grid:
+        #     print(row)
+        # print("")
+        # print("keys: {}\ndoors: {}\nemtyPath: {}\ninitGame: {}\nexitGame: {}".format(self.keys,self.doors,self.empyPath,self.initGame,self.exitGame))
+class Graph:
+    matrix=[]
+
+    def __init__(self,path):            
+        for x in path:
+            row=[]
+            for y in path:
+                if x[0]-1 <= y[0] <= x[0]+1:
+                    if x[1] -1 <= y[1] <= x[1] +1:
+                        if (x[0]==y[0] and x[1]!= y[1]) or (x[0]!= y[0] and x[1]== y[1]):
+                            row.append(1)
+                        else:
+                            row.append(0)
+                    else:
+                        row.append((0))
+                else:
+                    row.append(0)
+            self.matrix.append(row)
+
+    def BFS():
+        pass
+
+class Vetex:
+    color=None
+    distance= None
     
-    #possible path up
-    if initpath[0]-1>=0 and grid[initPath[0]-1][initPath[1]]!="#":
 
-def calculatePath(newGrid):
+def createGraph(grid):
 
-    exitPath=[]
-    exitPath.append(newGrid.exitGame)
+    print("path: ",grid.path)
 
+    graph= Graph(grid.path)
 
-
+    for element in graph.matrix:
+        print(element)
+                            
 
 
 
 def solutionEscape(grid):
     newGrid=Grid(grid)
-    calculatePath(newGrid)
+
+    createGraph(newGrid)
 
 
-solutionEscape(('aB..','##@#','$Ab#'))
+table= ('aB..','##@#','$Ab#')
+solutionEscape(table)
