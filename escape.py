@@ -48,10 +48,6 @@ There are 101 tests in total: 8 sample tests and 93 random tests. The largest ra
 
 """
 
-"""
-HACERLO CON UN GRAFOS
-
-"""
 class Grid:
 
     keys={}
@@ -84,15 +80,9 @@ class Grid:
                 elif grid[idxElement][idxSquere]=="$":
                     self.exitGame=(idxElement,idxSquere)
                     self.path.append((idxElement,idxSquere))
-        
-
-        
-        # for row in grid:
-        #     print(row)
-        # print("")
-        # print("keys: {}\ndoors: {}\nemtyPath: {}\ninitGame: {}\nexitGame: {}".format(self.keys,self.doors,self.empyPath,self.initGame,self.exitGame))
 class Graph:
     matrix=[]
+    DictDependencies= None
 
     def __init__(self,path):            
         for x in path:
@@ -109,14 +99,44 @@ class Graph:
                 else:
                     row.append(0)
             self.matrix.append(row)
+        
+        self.DictDependencies= dict(map(lambda x: (x[1],x[0]), (x for x in enumerate(path))))
 
-    def BFS():
-        pass
 
-class Vetex:
-    color=None
-    distance= None
+
+def BFS (grid,graph,root,findX):
+    print("root: {}\nfindX: {}".format(root,findX))
+    checkNodes= grid.copy()
+
+    conectionNodes=[root]
+    count= 0
+    while (checkNodes is checkNodes):
+        try:
+            root= conectionNodes[count]
+            checkNodes.remove(root)
+        except:
+            break
+
+        #insert element in conectionNodes for make a path a tree
+        for x in range(0,len(graph.matrix[graph.DictDependencies.get(root)])):
+            if graph.matrix[graph.DictDependencies.get(root)][x]==1 and grid[x] not in conectionNodes:
+                conectionNodes.append(grid[x])
+                if grid[x]== findX:
+                    checkNodes=[]
+                    break
+        
+        count += 1
+
+    #make a sieve to eliminate any node that does not correspond to the path between root and final node 
+
+    check= conectionNodes[len(conectionNodes)-1]
+    for idx in range( len(conectionNodes)-2,-1,-1):
+        if (graph.matrix[graph.DictDependencies.get(check)][graph.DictDependencies.get(conectionNodes[idx])]!= 0):
+            check= conectionNodes[idx]
+        else:
+            conectionNodes.pop(idx)
     
+    print(conectionNodes)
 
 def createGraph(grid):
 
@@ -126,11 +146,18 @@ def createGraph(grid):
 
     for element in graph.matrix:
         print(element)
+    
+    # print("DictDependencies: ",graph.DictDependencies)
+    # print("graph.DictDependencies.get((2,1)): ",graph.DictDependencies.get((2,1)))
+
+    BFS(grid.path,graph,(1,2),(2,0))
                             
 
 
 
 def solutionEscape(grid):
+    for i in grid:
+        print(i)
     newGrid=Grid(grid)
 
     createGraph(newGrid)
