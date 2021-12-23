@@ -11,8 +11,6 @@ def balance(left, right):
     return "Right"
   else:
     return "Balance"
-
-
 """
 
 
